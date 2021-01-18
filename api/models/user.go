@@ -1,10 +1,11 @@
 package models
 
 import (
+	u "api/utils"
 	"fmt"
 	"os"
 	"regexp"
-	u "api/utils"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/jinzhu/gorm"
@@ -20,9 +21,10 @@ type Token struct {
 // User ...
 type User struct {
 	gorm.Model
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	Token    string `json:"token" sql:"-"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+	Token     string `json:"token" sql:"-"`
+	ExpiresIn int64  `json:"expiresIn" sql:"-"`
 }
 
 var emailRegex = regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
@@ -68,16 +70,15 @@ func (user *User) Create() map[string]interface{} {
 		return u.Message(false, "Failed to create account, connection error.")
 	}
 
-	//Create new JWT token for the newly registered account
-	tk := &Token{UserID: user.ID}
-	token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
-	tokenString, _ := token.SignedString([]byte(os.Getenv("token_password")))
-	user.Token = tokenString
+	tokenString, tokenExp := createJwtToken(user.ID)
 
-	user.Password = "" //delete password
+	user.Token = tokenString //Store the token in the response
+	user.ExpiresIn = tokenExp // Store the token expiration timestamp in the response
+
+	user.Password = ""        //delete password
 
 	response := u.Message(true, "Account has been created")
-	response["user"] = user
+	response["data"] = user
 	return response
 }
 
@@ -100,13 +101,23 @@ func Login(email, password string) map[string]interface{} {
 	//Worked! Logged In
 	user.Password = "" // Empty the password for security reasons
 
-	//Create JWT token
-	tk := &Token{UserID: user.ID}
-	token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
-	tokenString, _ := token.SignedString([]byte(os.Getenv("token_password")))
+	tokenString, tokenExp := createJwtToken(user.ID)
+	
 	user.Token = tokenString //Store the token in the response
+	user.ExpiresIn = tokenExp // Store the token expiration timestamp in the response
 
 	resp := u.Message(true, "Logged In")
 	resp["user"] = user
 	return resp
+}
+
+func createJwtToken(userID uint) (string, int64) {
+	tokenExp := time.Now().Add(time.Minute * 15).Unix()
+	atClaims := jwt.MapClaims{}
+	atClaims["authorized"] = true
+	atClaims["user_id"] = userID
+	atClaims["exp"] = tokenExp
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
+	tokenString, _ := token.SignedString([]byte(os.Getenv("token_password")))
+	return tokenString, tokenExp
 }
