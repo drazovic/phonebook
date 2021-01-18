@@ -3,10 +3,18 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HeaderComponent } from './header/header.component';
+import { ContactsComponent } from './contacts/contacts.component';
+import { AuthComponent } from './auth/auth.component';
+import { AlertComponent } from './alert/alert.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HeaderComponent,
+    ContactsComponent,
+    AuthComponent,
+    AlertComponent
   ],
   imports: [
     BrowserModule,
