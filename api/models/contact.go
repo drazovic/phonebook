@@ -2,7 +2,7 @@ package models
 
 import (
 	"fmt"
-	u "server/utils"
+	u "api/utils"
 
 	"github.com/jinzhu/gorm"
 )

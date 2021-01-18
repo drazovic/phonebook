@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 	"os"
-	"server/models"
-	u "server/utils"
+	"api/models"
+	u "api/utils"
 	"strings"
 
 	jwt "github.com/dgrijalva/jwt-go"
