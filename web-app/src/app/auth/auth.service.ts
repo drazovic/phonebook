@@ -9,12 +9,14 @@ import { environment } from 'src/environments/environment';
 import { User } from './user.model';
 
 export interface AuthResponseData {
-    idToken: string;
-    email: string;
-    refreshToken: string;
-    expiresIn: string;
-    localId: string;
-    registered?: boolean;
+    data: {
+        token: string;
+        email: string;
+        expiresIn: number;
+        ID: string;
+    };
+    message: string;
+    success: boolean;
 }
 
 @Injectable({
@@ -28,10 +30,10 @@ export class AuthService {
 
     signup(email: string, password: string) {
         return this.http
-            .post<AuthResponseData>(
-                `${environment.apiUrl}/users/signup`,
-                { email: email, password: password }
-            )
+            .post<AuthResponseData>(`${environment.apiUrl}/users/signup`, {
+                email: email,
+                password: password,
+            })
             .pipe(
                 catchError(this.handleError),
                 tap(this.handleAuthentication.bind(this))
@@ -40,10 +42,10 @@ export class AuthService {
 
     login(email: string, password: string) {
         return this.http
-            .post<AuthResponseData>(
-                `${environment.apiUrl}/users/login`,
-                { email: email, password: password}
-            )
+            .post<AuthResponseData>(`${environment.apiUrl}/users/login`, {
+                email: email,
+                password: password,
+            })
             .pipe(
                 catchError(this.handleError),
                 tap(this.handleAuthentication.bind(this))
@@ -93,20 +95,15 @@ export class AuthService {
         }, expirationDuration);
     }
 
-    private handleAuthentication(responseData: AuthResponseData) {
-        console.log(responseData);
-        
-        const expirationDate = new Date(
-            new Date().getTime() + +responseData.expiresIn * 1000
-        );
-        const user = new User(
-            responseData.email,
-            responseData.localId,
-            responseData.idToken,
-            expirationDate
-        );
+    private handleAuthentication(response: AuthResponseData) {
+        const data = response.data;
+
+        const expirationDate = new Date(new Date().getTime() + data.expiresIn);
+        const user = new User(data.email, data.ID, data.token, expirationDate);
+        console.log(user);
+
         this.user.next(user);
-        this.autoLogout(+responseData.expiresIn * 1000);
+        this.autoLogout(data.expiresIn * 1000);
         localStorage.setItem('userData', JSON.stringify(user));
     }
 
