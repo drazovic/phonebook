@@ -10,6 +10,8 @@ export class ContactsComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+      console.log(2);
+      
   }
 
 }
