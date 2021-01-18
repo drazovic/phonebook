@@ -3,7 +3,8 @@ package models
 import (
 	"fmt"
 	"os"
-	u "server/utils"
+	"regexp"
+	u "api/utils"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/jinzhu/gorm"
@@ -19,32 +20,34 @@ type Token struct {
 // User ...
 type User struct {
 	gorm.Model
-	Username string `json:"username"`
+	Email    string `json:"email"`
 	Password string `json:"password"`
 	Token    string `json:"token" sql:"-"`
 }
 
+var emailRegex = regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
+
 //Validate incoming user details...
 func (user *User) Validate() (map[string]interface{}, bool) {
 
-	if len(user.Username) < 4 {
-		return u.Message(false, "Username is required and needs to be at least 4 chars long"), false
+	if !emailRegex.MatchString(user.Email) {
+		return u.Message(false, "Invalid Email"), false
 	}
 
 	if len(user.Password) < 6 {
 		return u.Message(false, "Password is required and needs to be at least 6 chars long"), false
 	}
 
-	//Username must be unique
+	//Email must be unique
 	temp := &User{}
 
 	//check for errors and duplicate emails
-	err := GetDB().Table("users").Where("username = ?", user.Username).First(temp).Error
+	err := GetDB().Table("users").Where("email = ?", user.Email).First(temp).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return u.Message(false, "Connection error. Please retry"), false
 	}
-	if temp.Username != "" {
-		return u.Message(false, "Username already in use by another user."), false
+	if temp.Email != "" {
+		return u.Message(false, "Email already in use."), false
 	}
 
 	return u.Message(false, "Requirement passed"), true
@@ -79,12 +82,12 @@ func (user *User) Create() map[string]interface{} {
 }
 
 // Login ...
-func Login(username, password string) map[string]interface{} {
+func Login(email, password string) map[string]interface{} {
 	user := &User{}
-	err := GetDB().Table("users").Where("username = ?", username).First(user).Error
+	err := GetDB().Table("users").Where("email = ?", email).First(user).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
-			return u.Message(false, "Username not found")
+			return u.Message(false, "Email not found")
 		}
 		fmt.Println(err.Error())
 		return u.Message(false, "Connection error. Please retry")
