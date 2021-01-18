@@ -1,1 +1,44 @@
-<p>auth works!</p>
+<mat-card>
+    <mat-card-content>
+        <h2>Log In</h2>
+        <app-alert
+            [message]="error"
+            (close)="onHandleError()"
+            *ngIf="error"
+        ></app-alert>
+        <div *ngIf="isLoading">
+            <app-loading-spinner></app-loading-spinner>
+        </div>
+        <form
+            #authForm="ngForm"
+            (ngSubmit)="onSubmit(authForm)"
+            *ngIf="!isLoading"
+        >
+            <mat-form-field class="full-width-input">
+                <input
+                    matInput
+                    placeholder="Email"
+                    type="email"
+                    ngModel
+                    name="email"
+                    required
+                    email
+                />
+                <mat-error> Please provide a valid email address </mat-error>
+            </mat-form-field>
+            <mat-form-field class="full-width-input">
+                <input
+                    matInput
+                    placeholder="Password"
+                    type="password"
+                    ngModel
+                    name="password"
+                    required
+                    minlength="6"
+                />
+                <mat-error> Please provide a valid password </mat-error>
+            </mat-form-field>
+            <button mat-raised-button color="primary">Login</button>
+        </form>
+    </mat-card-content>
+</mat-card>
