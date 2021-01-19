@@ -25,7 +25,6 @@ import { AppComponent } from './app.component';
 import { ContactsComponent } from './contacts/contacts.component';
 import { ContactListComponent } from './contacts/contact-list/contact-list.component';
 import { AuthComponent } from './auth/auth.component';
-import { NavComponent } from './nav/nav.component';
 import { HttpClientModule } from '@angular/common/http';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
 import { EditContactComponent } from './contacts/edit-contact/edit-contact.component';
@@ -37,7 +36,6 @@ import { EditContactComponent } from './contacts/edit-contact/edit-contact.compo
         AuthComponent,
         AlertComponent,
         LoadingSpinnerComponent,
-        NavComponent,
         ContactListComponent,
         EditContactComponent,
     ],
