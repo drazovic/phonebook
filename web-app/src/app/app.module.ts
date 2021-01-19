@@ -17,7 +17,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -27,6 +28,7 @@ import { AuthComponent } from './auth/auth.component';
 import { NavComponent } from './nav/nav.component';
 import { HttpClientModule } from '@angular/common/http';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
+import { EditContactComponent } from './contacts/edit-contact/edit-contact.component';
 
 @NgModule({
     declarations: [
@@ -37,6 +39,7 @@ import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinne
         LoadingSpinnerComponent,
         NavComponent,
         ContactListComponent,
+        EditContactComponent,
     ],
     imports: [
         BrowserModule,
@@ -58,9 +61,12 @@ import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinne
         MatFormFieldModule,
         MatInputModule,
         MatMenuModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        MatDialogModule,
+        MatToolbarModule,
     ],
     providers: [],
     bootstrap: [AppComponent],
+    entryComponents: [EditContactComponent],
 })
 export class AppModule {}
