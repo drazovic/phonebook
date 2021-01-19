@@ -19,7 +19,7 @@ export class ContactListComponent implements AfterViewInit, OnInit {
     dataSource: ContactListDataSource;
 
     /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-    displayedColumns = ['id', 'name', 'phoneNumber'];
+    displayedColumns = ['id', 'name', 'phoneNumber', 'delete'];
 
     ngOnInit() {
         this.dataSource = new ContactListDataSource();
