@@ -97,10 +97,8 @@ export class AuthService {
 
     private handleAuthentication(response: AuthResponseData) {
         const data = response.data;
-
         const expirationDate = new Date(new Date().getTime() + data.expiresIn);
         const user = new User(data.email, data.ID, data.token, expirationDate);
-        console.log(user);
 
         this.user.next(user);
         this.autoLogout(data.expiresIn * 1000);
