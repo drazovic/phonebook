@@ -1,6 +1,6 @@
 <mat-card>
     <mat-card-content>
-        <h2>Log In</h2>
+        <h2>{{ isLoginMode ? 'Login' : 'Sign up' }}</h2>
         <app-alert
             [message]="error"
             (close)="onHandleError()"
@@ -38,7 +38,23 @@
                 />
                 <mat-error> Please provide a valid password </mat-error>
             </mat-form-field>
-            <button mat-raised-button color="primary">Login</button>
+            <button mat-raised-button color="primary">
+                {{ isLoginMode ? 'Login' : 'Sign Up' }}
+            </button>
         </form>
+        <div class="status" *ngIf="!isLoading">
+            <div class="status-text" *ngIf="isLoginMode">
+                Don't have an account?
+                <span class="status-action" (click)="onSwitchMode()"
+                    >Sign up</span
+                >
+            </div>
+            <div class="status-text" *ngIf="!isLoginMode">
+                Already have an account?
+                <span class="status-action" (click)="onSwitchMode()"
+                    >Login</span
+                >
+            </div>
+        </div>
     </mat-card-content>
 </mat-card>

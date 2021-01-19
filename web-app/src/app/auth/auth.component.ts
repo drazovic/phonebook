@@ -12,7 +12,7 @@ import { AuthResponseData } from './auth.service';
     styleUrls: ['./auth.component.scss'],
 })
 export class AuthComponent implements OnInit {
-    isLoginMode = false;
+    isLoginMode = true;
     isLoading = false;
     error: string | null;
 

@@ -3,8 +3,20 @@ mat-card {
     min-height: 210px;
     margin: 2em auto;
     text-align: center;
-  }
-  
-  mat-form-field {
+}
+
+mat-form-field {
     display: block;
-  }
+}
+
+.status {
+    margin-top: 1em;
+}
+
+.status-text {
+    cursor: default;
+}
+.status-action {
+    cursor: pointer;
+    font-weight: bold;
+}
