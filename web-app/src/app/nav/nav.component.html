@@ -1,26 +1,16 @@
 <mat-toolbar color="primary" class="expanded-toolbar">
     <span>
-        <button
-            mat-fab
-            color="accent"
-            class="fab-add"
-            matTooltip="add new contact"
-        >
-            <mat-icon>add</mat-icon>
-        </button>
-    </span>
-    <span>
         <button mat-button routerLink="/contacts">Phonebook</button>
     </span>
     <div fxLayout="row" fxShow="false" fxShow.gt-sm>
-        <button mat-button routerLink="/auth">
+        <button *ngIf="!isAuthenticated" mat-button routerLink="/auth">
             <mat-icon>login</mat-icon>
             Login
         </button>
-        <!-- <button mat-button>
+        <button *ngIf="isAuthenticated" mat-button (click)="onLogout()">
             <mat-icon>phonelink_erase</mat-icon>
             Logout
-        </button> -->
+        </button>
     </div>
 </mat-toolbar>
 <router-outlet></router-outlet>

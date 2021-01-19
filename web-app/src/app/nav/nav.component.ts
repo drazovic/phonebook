@@ -1,21 +1,30 @@
-import { Component } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+
+import { AuthService } from '../auth/auth.service';
 
 @Component({
-  selector: 'app-nav',
-  templateUrl: './nav.component.html',
-  styleUrls: ['./nav.component.scss']
+    selector: 'app-nav',
+    templateUrl: './nav.component.html',
+    styleUrls: ['./nav.component.scss'],
 })
-export class NavComponent {
+export class NavComponent implements OnInit, OnDestroy {
+    isAuthenticated: boolean;
+    subscription: Subscription;
 
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
-    .pipe(
-      map(result => result.matches),
-      shareReplay()
-    );
+    constructor(private authService: AuthService) {}
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+    ngOnInit() {
+        this.subscription = this.authService.user.subscribe((user) => {
+            this.isAuthenticated = !!user;
+        });
+    }
 
+    onLogout() {
+        this.authService.logout();
+    }
+
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
 }

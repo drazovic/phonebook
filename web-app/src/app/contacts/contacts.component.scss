@@ -1,3 +1,14 @@
 .container {
     padding: 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.fab-add {
+    margin-top: -47px;
+}
+
+app-contact-list {
+    width: 100%;
 }

@@ -1,3 +1,12 @@
 <div class="container">
-  <app-contact-list></app-contact-list>
+    <button
+        mat-fab
+        color="accent"
+        class="fab-add"
+        matTooltip="Add new contact"
+        (click)="onAddContact()"
+    >
+        <mat-icon>add</mat-icon>
+    </button>
+    <app-contact-list></app-contact-list>
 </div>
