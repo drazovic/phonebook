@@ -107,7 +107,7 @@ func Login(email, password string) map[string]interface{} {
 	user.ExpiresIn = tokenExp // Store the token expiration timestamp in the response
 
 	resp := u.Message(true, "Logged In")
-	resp["user"] = user
+	resp["data"] = user
 	return resp
 }
 
