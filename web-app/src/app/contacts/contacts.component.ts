@@ -15,9 +15,9 @@ export class ContactsComponent implements OnInit {
     onAddContact() {
         this.openDialog();
     }
-    
-    onEditContact() {
-        
+
+    onEditContact($event: any) {
+        console.log($event);
     }
 
     openDialog(): void {

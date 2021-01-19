@@ -1,11 +1,18 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {
+    AfterViewInit,
+    Component,
+    EventEmitter,
+    OnInit,
+    Output,
+    ViewChild,
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { MatTable } from '@angular/material/table';
-import {
-    ContactListDataSource,
-    ContactListItem,
-} from './contact-list-datasource';
+import { MatTableDataSource } from '@angular/material/table';
+import { Subscription } from 'rxjs';
+
+import { Contact } from '../contact.model';
+import { ContactsService } from '../contacts.service';
 
 @Component({
     selector: 'app-contact-list',
@@ -15,19 +22,30 @@ import {
 export class ContactListComponent implements AfterViewInit, OnInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
-    @ViewChild(MatTable) table: MatTable<ContactListItem>;
-    dataSource: ContactListDataSource;
-
-    /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
+    dataSource: MatTableDataSource<Contact>;
     displayedColumns = ['id', 'name', 'phoneNumber', 'delete'];
 
+    subscription: Subscription;
+
+    @Output() rowClicked = new EventEmitter<Object>();
+
+    constructor(private contactsService: ContactsService) {}
+
     ngOnInit() {
-        this.dataSource = new ContactListDataSource();
+        this.subscription = this.contactsService.contactsChanged.subscribe(
+            (contacts) => {
+                this.dataSource = new MatTableDataSource(contacts);
+            }
+        );
+    }
+
+    onRowClicked(row: any) {
+        console.log(row);
+        this.rowClicked.emit(row);
     }
 
     ngAfterViewInit() {
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
-        this.table.dataSource = this.dataSource;
     }
 }
