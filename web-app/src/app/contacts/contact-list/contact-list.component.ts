@@ -11,6 +11,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
+import { DataStorageService } from 'src/app/shared/data-storage.service';
+import { AlertTypes } from 'src/app/shared/enums';
 
 import { ContactsService } from '../contacts.service';
 import { Contact } from '../interfaces';
@@ -29,15 +31,19 @@ export class ContactListComponent implements AfterViewInit, OnInit, OnDestroy {
         'phone',
         'delete',
     ];
-
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
 
     subscription: Subscription;
 
-    @Output() rowClicked = new EventEmitter<Contact>();
+    alertType = AlertTypes.INFO;
 
-    constructor(private contactsService: ContactsService) {}
+    @Output() contactSelected = new EventEmitter<Contact>();
+
+    constructor(
+        private contactsService: ContactsService,
+        private dataStorageService: DataStorageService
+    ) {}
 
     ngOnInit() {
         const contacts = this.contactsService.getContacts();
@@ -50,7 +56,14 @@ export class ContactListComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     onRowClicked(contact: Contact) {
-        this.rowClicked.emit(contact);
+        this.contactSelected.emit(contact);
+    }
+
+    onDelete(contact: Contact) {
+        if (!contact.ID) {
+            return;
+        }
+        this.dataStorageService.deleteContact(contact.ID);
     }
 
     ngAfterViewInit() {

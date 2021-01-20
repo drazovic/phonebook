@@ -51,7 +51,6 @@ export class ContactsComponent implements OnInit {
         this.dialogRef
             .afterClosed()
             .subscribe((result: EditContactDialogData) => {
-                console.log(result);
                 if (!result.contact) {
                     return;
                 }
