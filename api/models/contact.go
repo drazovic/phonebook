@@ -1,8 +1,8 @@
 package models
 
 import (
-	"fmt"
 	u "api/utils"
+	"fmt"
 
 	"github.com/jinzhu/gorm"
 )
@@ -10,10 +10,10 @@ import (
 // Contact ...
 type Contact struct {
 	gorm.Model
-	FirstName   string `json:"firstName"`
-	LastName    string `json:"lastName"`
-	PhoneNumber string `json:"phoneNumber"`
-	UserID      uint   `json:"user_id"` //The user that this contact belongs to
+	Name   string `json:"name"`
+	Email  string `json:"email"`
+	Phone  int64    `json:"phone"`
+	UserID uint   `json:"user_id"` //The user that this contact belongs to
 }
 
 /*
@@ -21,16 +21,16 @@ Validate struct function validate the required parameters sent through the http 
 returns message and true if the requirement is met
 */
 func (contact *Contact) Validate() (map[string]interface{}, bool) {
-
-	if contact.FirstName == "" {
-		return u.Message(false, "Contact name should be on the payload"), false
+	fmt.Println(contact)
+	if len(contact.Name) < 2 {
+		return u.Message(false, "First Name should be at least 2 chars long"), false
 	}
 
-	if contact.LastName == "" {
-		return u.Message(false, "Contact name should be on the payload"), false
+	if contact.Email == "" {
+		return u.Message(false, "Email should be on the payload"), false
 	}
 
-	if contact.PhoneNumber == "" {
+	if contact.Phone == 0 {
 		return u.Message(false, "Phone number should be on the payload"), false
 	}
 
@@ -51,7 +51,7 @@ func (contact *Contact) Create() map[string]interface{} {
 	GetDB().Create(contact)
 
 	resp := u.Message(true, "success")
-	resp["contact"] = contact
+	resp["data"] = contact
 	return resp
 }
 
