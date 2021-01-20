@@ -3,6 +3,7 @@ package models
 import (
 	u "api/utils"
 	"fmt"
+	"regexp"
 
 	"github.com/jinzhu/gorm"
 )
@@ -12,9 +13,11 @@ type Contact struct {
 	gorm.Model
 	Name   string `json:"name"`
 	Email  string `json:"email"`
-	Phone  int64    `json:"phone"`
+	Phone  string `json:"phone"`
 	UserID uint   `json:"user_id"` //The user that this contact belongs to
 }
+
+const phoneNumberRegex = `/^[+][0-9]{2,3}-[0-9]{2,3}-[0-9]{7,8}$/`
 
 /*
 Validate struct function validate the required parameters sent through the http request body
@@ -29,7 +32,8 @@ func (contact *Contact) Validate() (map[string]interface{}, bool) {
 		return u.Message(false, "Email should be on the payload"), false
 	}
 
-	if contact.Phone == 0 {
+	matched, _ := regexp.MatchString(phoneNumberRegex, contact.Phone)
+	if contact.Phone == "" && matched {
 		return u.Message(false, "Phone number should be on the payload"), false
 	}
 
