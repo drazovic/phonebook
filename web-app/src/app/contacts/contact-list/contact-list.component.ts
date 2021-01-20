@@ -59,6 +59,8 @@ export class ContactListComponent implements AfterViewInit, OnInit, OnDestroy {
     constructor(private contactsService: ContactsService) {}
 
     ngOnInit() {
+        const contacts = this.contactsService.getContacts();
+        this.dataSource = contacts;
         this.subscription = this.contactsService.contactsChanged.subscribe(
             (contacts) => {
                 console.log(contacts);

@@ -21,11 +21,7 @@ export class ContactsComponent implements OnInit {
         private dataStorageService: DataStorageService
     ) {}
 
-    ngOnInit(): void {
-        console.log(2333);
-        
-        this.dataStorageService.fetchContacts();
-    }
+    ngOnInit(): void { }
 
     onAddContact() {
         const dialogData: EditContactDialogData = {

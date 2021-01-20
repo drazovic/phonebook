@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AuthComponent } from './auth/auth.component';
 import { AuthGard } from './auth/auth.gard';
+import { ContactsResolverService } from './contacts/contacts-resolver.service';
 import { ContactsComponent } from './contacts/contacts.component';
 
 const routes: Routes = [
@@ -15,6 +16,7 @@ const routes: Routes = [
         path: 'contacts',
         component: ContactsComponent,
         canActivate: [AuthGard],
+        resolve: [ContactsResolverService],
     },
 ];
 

@@ -63,9 +63,9 @@ export class DataStorageService {
     fetchContacts() {
         return this.http
             .get<ApiResponse<Contact[]>>(`${environment.apiUrl}/contacts`)
-            .pipe(map((response) => response.data))
-            .subscribe((contacts) =>
-                this.contactsService.setContacts(contacts)
+            .pipe(
+                map((response) => response.data),
+                tap((contacts) => this.contactsService.setContacts(contacts))
             );
     }
 }
