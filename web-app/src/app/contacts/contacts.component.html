@@ -8,6 +8,7 @@
     >
         <mat-icon>add</mat-icon>
     </button>
+    <app-alert [type]="alertType" [message]="error" *ngIf="error"></app-alert>
     <app-contact-list
         (contactSelected)="onEditContact($event)"
     ></app-contact-list>

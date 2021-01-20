@@ -4,7 +4,10 @@ import {
     MatDialogConfig,
     MatDialogRef,
 } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
+
 import { DataStorageService } from '../shared/data-storage.service';
+import { AlertTypes } from '../shared/enums';
 import { EditContactComponent } from './edit-contact/edit-contact.component';
 import { Contact, EditContactDialogData } from './interfaces';
 
@@ -15,6 +18,8 @@ import { Contact, EditContactDialogData } from './interfaces';
 })
 export class ContactsComponent implements OnInit {
     dialogRef: MatDialogRef<EditContactComponent> | null;
+    error: string | null;
+    alertType = AlertTypes.ERROR;
 
     constructor(
         private dialog: MatDialog,
@@ -24,6 +29,7 @@ export class ContactsComponent implements OnInit {
     ngOnInit(): void {}
 
     onAddContact() {
+        this.error = null;
         const dialogData: EditContactDialogData = {
             isEditMode: false,
             title: 'New',
@@ -32,6 +38,7 @@ export class ContactsComponent implements OnInit {
     }
 
     onEditContact(contact: Contact) {
+        this.error = null;
         const dialogData: EditContactDialogData = {
             isEditMode: true,
             title: 'Edit',
@@ -55,11 +62,24 @@ export class ContactsComponent implements OnInit {
                     return;
                 }
 
+                let contactObservable: Observable<Contact>;
+
                 if (result.isEditMode) {
-                    this.dataStorageService.updateContact(result.contact);
+                    contactObservable = this.dataStorageService.updateContact(
+                        result.contact
+                    );
                 } else {
-                    this.dataStorageService.storeNewContact(result.contact);
+                    contactObservable = this.dataStorageService.storeNewContact(
+                        result.contact
+                    );
                 }
+
+                contactObservable.subscribe(
+                    () => {},
+                    (errorMessage) => {
+                        this.error = errorMessage;
+                    }
+                );
             });
     }
 }
