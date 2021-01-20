@@ -6,7 +6,7 @@ import {
 } from '@angular/material/dialog';
 import { DataStorageService } from '../shared/data-storage.service';
 import { EditContactComponent } from './edit-contact/edit-contact.component';
-import { EditContactDialogData } from './interfaces';
+import { Contact, EditContactDialogData } from './interfaces';
 
 @Component({
     selector: 'app-contacts',
@@ -21,23 +21,22 @@ export class ContactsComponent implements OnInit {
         private dataStorageService: DataStorageService
     ) {}
 
-    ngOnInit(): void { }
+    ngOnInit(): void {}
 
     onAddContact() {
         const dialogData: EditContactDialogData = {
             isEditMode: false,
-            title: 'New contact',
+            title: 'New',
         };
         this.openDialog(dialogData);
     }
 
-    onEditContact($event: any) {
+    onEditContact(contact: Contact) {
         const dialogData: EditContactDialogData = {
-            isEditMode: false,
-            title: 'New contact',
-            // contact:
+            isEditMode: true,
+            title: 'Edit',
+            contact: contact,
         };
-        console.log($event);
         this.openDialog(dialogData);
     }
 

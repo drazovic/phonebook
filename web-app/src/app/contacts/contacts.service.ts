@@ -14,8 +14,6 @@ export class ContactsService {
     constructor() {}
 
     setContacts(contacts: Contact[]) {
-        console.log(contacts);
-        
         this.contacts = contacts;
         this.contactsChanged.next(this.contacts.slice());
     }

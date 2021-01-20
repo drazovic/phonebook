@@ -4,7 +4,11 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { Contact, EditContactDialogData } from '../interfaces';
 
-const PHONE_NUMBER_REGEX = new RegExp(/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/);
+const PHONE_NUMBER_REGEX = new RegExp(
+    /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/
+);
+
+type FormValues = { name: string; email: string; phone: number };
 
 @Component({
     selector: 'app-edit-contact',
@@ -13,6 +17,8 @@ const PHONE_NUMBER_REGEX = new RegExp(/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9
 })
 export class EditContactComponent implements OnInit {
     contactForm: FormGroup;
+    initialFormValues: FormValues;
+    isContactFormChanged: boolean;
 
     constructor(
         public dialogRef: MatDialogRef<EditContactComponent>,
@@ -20,29 +26,50 @@ export class EditContactComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        const initialName = this.data.isEditMode ? this.data.contact?.name : '';
-        const initialEmail = this.data.isEditMode
-            ? this.data.contact?.email
-            : '';
-        const initialPhone = this.data.isEditMode
-            ? this.data.contact?.phone
-            : '';
+        this.initialFormValues = this.generateInitialFromValues();
 
         this.contactForm = new FormGroup({
-            name: new FormControl(initialName, [
+            name: new FormControl(this.initialFormValues.name, [
                 Validators.required,
                 Validators.minLength(2),
             ]),
-            email: new FormControl(initialEmail, [
+            email: new FormControl(this.initialFormValues.email, [
                 Validators.required,
                 Validators.email,
             ]),
-            phone: new FormControl(initialPhone, [
+            phone: new FormControl(this.initialFormValues.phone, [
                 Validators.required,
                 Validators.pattern(PHONE_NUMBER_REGEX),
             ]),
         });
-        console.log(this.data);
+
+        this.contactForm.valueChanges.subscribe((changes) => {
+            this.isContactFormChanged = this.isFormChanged(changes);
+        });
+    }
+
+    generateInitialFromValues(): FormValues {
+        const isEditMode = this.data.isEditMode;
+        const initialName =
+            isEditMode && this.data.contact ? this.data.contact.name : '';
+        const initialEmail =
+            isEditMode && this.data.contact ? this.data.contact.email : '';
+        const initialPhone =
+            isEditMode && this.data.contact ? this.data.contact.phone : '';
+
+        return {
+            name: initialName,
+            email: initialEmail,
+            phone: Number(initialPhone),
+        };
+    }
+
+    isFormChanged(newFormValues: FormValues) {
+        return (
+            newFormValues.name !== this.initialFormValues.name ||
+            newFormValues.email !== this.initialFormValues.email ||
+            newFormValues.phone !== this.initialFormValues.phone
+        );
     }
 
     get contactFormControl() {
@@ -50,7 +77,10 @@ export class EditContactComponent implements OnInit {
     }
 
     save() {
-        const contact: Contact = this.contactForm.value;
+        const contact: Contact = {
+            ...this.data.contact,
+            ...this.contactForm.value,
+        };
         const result: EditContactDialogData = {
             ...this.data,
             contact: contact,

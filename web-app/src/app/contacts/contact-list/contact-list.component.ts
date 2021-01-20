@@ -15,34 +15,13 @@ import { Subscription } from 'rxjs';
 import { ContactsService } from '../contacts.service';
 import { Contact } from '../interfaces';
 
-export interface PeriodicElement {
-    name: string;
-    position: number;
-    weight: number;
-    symbol: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-    { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
-    { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
-    { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
-    { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
-    { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
-    { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
-    { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
-    { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
-    { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
-    { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
-];
-
 @Component({
     selector: 'app-contact-list',
     templateUrl: './contact-list.component.html',
     styleUrls: ['./contact-list.component.scss'],
 })
 export class ContactListComponent implements AfterViewInit, OnInit, OnDestroy {
-    @ViewChild(MatPaginator) paginator: MatPaginator;
-    @ViewChild(MatSort) sort: MatSort;
+    dataSource: MatTableDataSource<Contact>;
     displayedColumns: string[] = [
         'position',
         'name',
@@ -50,34 +29,34 @@ export class ContactListComponent implements AfterViewInit, OnInit, OnDestroy {
         'phone',
         'delete',
     ];
-    dataSource: Contact[];
+
+    @ViewChild(MatPaginator) paginator: MatPaginator;
+    @ViewChild(MatSort) sort: MatSort;
 
     subscription: Subscription;
 
-    @Output() rowClicked = new EventEmitter<Object>();
+    @Output() rowClicked = new EventEmitter<Contact>();
 
     constructor(private contactsService: ContactsService) {}
 
     ngOnInit() {
         const contacts = this.contactsService.getContacts();
-        this.dataSource = contacts;
+        this.dataSource = new MatTableDataSource<Contact>(contacts);
         this.subscription = this.contactsService.contactsChanged.subscribe(
             (contacts) => {
-                console.log(contacts);
-                this.dataSource = contacts;
+                this.dataSource = new MatTableDataSource<Contact>(contacts);
             }
         );
     }
 
-    onRowClicked(row: any) {
-        console.log(row);
-        this.rowClicked.emit(row);
+    onRowClicked(contact: Contact) {
+        this.rowClicked.emit(contact);
     }
 
     ngAfterViewInit() {
         if (this.dataSource) {
-            // this.dataSource.sort = this.sort;
-            // this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator;
         }
     }
 

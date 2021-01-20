@@ -78,7 +78,7 @@
             class="save-button"
             type="submit"
             color="accent"
-            [disabled]="contactForm.invalid"
+            [disabled]="contactForm.invalid || !isContactFormChanged"
         >
             Save
         </button>

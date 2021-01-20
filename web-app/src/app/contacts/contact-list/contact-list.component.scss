@@ -1,7 +1,29 @@
 .mat-elevation-z8 {
-    margin-top: 1em;
+    margin-top: 1em !important;
 }
 
 table {
     width: 100%;
+}
+
+.mat-cell.mat-column-name {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1em;
+    height: inherit;
+}
+
+.mat-row {
+    cursor: pointer;
+
+    &:hover {
+        background-color: khaki;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .mat-cell.mat-column-name span {
+        display: none;
+    }
 }
