@@ -4,14 +4,16 @@ import (
 	"context"
 	"net/http"
 	"os"
-	"api/models"
-	u "api/utils"
 	"strings"
 
 	jwt "github.com/dgrijalva/jwt-go"
+
+	"api/models"
+	u "api/utils"
 )
 
 type contextKey int
+
 // AuthenticatedUserIDKey ...
 const AuthenticatedUserIDKey contextKey = 0
 
