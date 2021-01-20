@@ -28,13 +28,17 @@ export class ContactsService {
     }
 
     updateContact(id: number, updatedContact: Contact) {
-        const contactIndex = this.contacts.findIndex((contact) => contact.ID);
+        const contactIndex = this.contacts.findIndex(
+            (contact) => contact.ID === id
+        );
         this.contacts[contactIndex] = updatedContact;
         this.contactsChanged.next(this.contacts.slice());
     }
 
-    deleteContacts(id: number) {
-        const contactIndex = this.contacts.findIndex((contact) => contact.ID);
+    deleteContact(id: number) {
+        const contactIndex = this.contacts.findIndex(
+            (contact) => contact.ID === id
+        );
         this.contacts.splice(contactIndex, 1);
         this.contactsChanged.next(this.contacts.slice());
     }
