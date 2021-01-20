@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
 import { ApiResponse } from '../api-response.model';
@@ -32,7 +32,13 @@ export class AuthService {
                 password: password,
             })
             .pipe(
-                catchError(this.handleError),
+                map((response) => {
+                    if (!response.status) {
+                        throw response.message;
+                    } else {
+                        return response;
+                    }
+                }),
                 tap(this.handleAuthentication.bind(this))
             );
     }
@@ -44,7 +50,15 @@ export class AuthService {
                 password: password,
             })
             .pipe(
-                catchError(this.handleError),
+                map((response) => {
+                    console.log(response);
+
+                    if (!response.status) {
+                        throw response.message;
+                    } else {
+                        return response;
+                    }
+                }),
                 tap(this.handleAuthentication.bind(this))
             );
     }
@@ -96,33 +110,11 @@ export class AuthService {
         const data = response.data;
 
         const expirationTimestamp = data.expiresAt * 1000;
-        const expirationDate = new Date(data.expiresAt * 1000);
+        const expirationDate = new Date(expirationTimestamp);
         const user = new User(data.email, data.ID, data.token, expirationDate);
 
         this.user.next(user);
         this.autoLogout(expirationTimestamp);
         localStorage.setItem('userData', JSON.stringify(user));
-    }
-
-    private handleError(errorResponse: HttpErrorResponse) {
-        let errorMessage = 'An error occured.';
-        if (!errorResponse.error || !errorResponse.error.error) {
-            throwError(errorMessage);
-        }
-        switch (errorResponse.error.error.message) {
-            case 'EMAIL_EXISTS':
-                errorMessage =
-                    'The email address is already in use by another account.';
-                break;
-            case 'EMAIL_NOT_FOUND':
-                errorMessage =
-                    'There is no user record corresponding to this identifier. The user may have been deleted.';
-                break;
-            case 'INVALID_PASSWORD':
-                errorMessage =
-                    'The password is invalid or the user does not have a password.';
-                break;
-        }
-        return throwError(errorMessage);
     }
 }

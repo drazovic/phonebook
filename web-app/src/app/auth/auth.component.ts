@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 
 import { ApiResponse } from '../api-response.model';
 import { AuthData, AuthService } from './auth.service';
+import { AlertTypes } from 'src/app/shared/enums';
 
 @Component({
     selector: 'app-auth',
@@ -15,6 +16,7 @@ export class AuthComponent implements OnInit {
     isLoginMode = true;
     isLoading = false;
     error: string | null;
+    alertType = AlertTypes.ERROR;
 
     constructor(private authService: AuthService, private router: Router) {}
 
@@ -25,6 +27,8 @@ export class AuthComponent implements OnInit {
     }
 
     onSubmit(form: NgForm) {
+        this.error = null;
+
         if (!form.valid) {
             return;
         }
