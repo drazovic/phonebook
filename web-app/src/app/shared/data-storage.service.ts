@@ -24,8 +24,6 @@ export class DataStorageService {
                 contact
             )
             .subscribe((response) => {
-                console.log(response);
-
                 if (!response.data.ID) {
                     return;
                 }
