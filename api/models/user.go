@@ -2,7 +2,6 @@ package models
 
 import (
 	u "api/utils"
-	"fmt"
 	"os"
 	"regexp"
 	"time"
@@ -24,7 +23,7 @@ type User struct {
 	Email     string `json:"email"`
 	Password  string `json:"password"`
 	Token     string `json:"token" sql:"-"`
-	ExpiresIn int64  `json:"expiresIn" sql:"-"`
+	ExpiresAt int64  `json:"expiresAt" sql:"-"`
 }
 
 var emailRegex = regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
@@ -72,10 +71,10 @@ func (user *User) Create() map[string]interface{} {
 
 	tokenString, tokenExp := createJwtToken(user.ID)
 
-	user.Token = tokenString //Store the token in the response
-	user.ExpiresIn = tokenExp // Store the token expiration timestamp in the response
+	user.Token = tokenString  //Store the token in the response
+	user.ExpiresAt = tokenExp // Store the token expiration timestamp in the response
 
-	user.Password = ""        //delete password
+	user.Password = "" //delete password
 
 	response := u.Message(true, "Account has been created")
 	response["data"] = user
@@ -90,7 +89,6 @@ func Login(email, password string) map[string]interface{} {
 		if err == gorm.ErrRecordNotFound {
 			return u.Message(false, "Email not found")
 		}
-		fmt.Println(err.Error())
 		return u.Message(false, "Connection error. Please retry")
 	}
 
@@ -102,9 +100,9 @@ func Login(email, password string) map[string]interface{} {
 	user.Password = "" // Empty the password for security reasons
 
 	tokenString, tokenExp := createJwtToken(user.ID)
-	
-	user.Token = tokenString //Store the token in the response
-	user.ExpiresIn = tokenExp // Store the token expiration timestamp in the response
+
+	user.Token = tokenString  //Store the token in the response
+	user.ExpiresAt = tokenExp // Store the token expiration timestamp in the response
 
 	resp := u.Message(true, "Logged In")
 	resp["data"] = user
@@ -112,12 +110,9 @@ func Login(email, password string) map[string]interface{} {
 }
 
 func createJwtToken(userID uint) (string, int64) {
-	tokenExp := time.Now().Add(time.Minute * 15).Unix()
-	atClaims := jwt.MapClaims{}
-	atClaims["authorized"] = true
-	atClaims["user_id"] = userID
-	atClaims["exp"] = tokenExp
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
+	tokenExp := time.Now().Add(time.Hour * 24).Unix()
+	tk := &Token{UserID: userID}
+	token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
 	tokenString, _ := token.SignedString([]byte(os.Getenv("token_password")))
 	return tokenString, tokenExp
 }
