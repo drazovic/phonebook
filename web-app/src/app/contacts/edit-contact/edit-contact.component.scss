@@ -1,5 +1,13 @@
-.fill-remaining {
-    flex: 1 1 auto;
+mat-toolbar {
+    .heading-row {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .avatar-row {
+        display: flex;
+        justify-content: center;
+    }
 }
 
 .contact-form {

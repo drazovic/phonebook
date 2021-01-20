@@ -1,50 +1,38 @@
 <mat-toolbar color="primary">
-    <mat-toolbar-row>
-        New
-        <span class="fill-remaining"></span>
+    <mat-toolbar-row class="heading-row">
+        <h3 class="heading">{{ data.title }}</h3>
         <button mat-icon-button mat-dialog-close matTooltip="close">
             <mat-icon>close</mat-icon>
         </button>
     </mat-toolbar-row>
-    <mat-toolbar-row fxLayoutAlign="center center">
-        <!-- <avatar
-            [email]="newContactForm.value.email"
-            [name]="newContactForm.value.name"
-            [displayType]="'circle'"
-        >
-        </avatar> -->
+    <mat-toolbar-row class="avatar-row">
+        <ngx-avatar
+            [name]="contactForm.value.name"
+            [gravatarId]="contactForm.value.email"
+            [initialsSize]="2"
+        ></ngx-avatar>
     </mat-toolbar-row>
 </mat-toolbar>
-<form
-    #form
-    [formGroup]="newContactForm"
-    (ngSubmit)="newContactForm.valid && save()"
->
+<form #form [formGroup]="contactForm" (ngSubmit)="contactForm.valid && save()">
     <div class="contact-form">
         <!--name-->
         <mat-form-field appearance="outline">
             <mat-label>Name</mat-label>
             <input
                 matInput
-                placeholder="Enter the contact name here"
-                minlength="2"
-                maxlength="30"
+                class="form-control"
+                placeholder="e.g: Mark"
+                minlength="4"
                 formControlName="name"
                 required
             />
             <mat-icon matSuffix color="accent">person</mat-icon>
-            <mat-hint align="end" aria-live="polite">
-                {{ newContactForm.value.name.length }} / 25
-            </mat-hint>
-            <!-- <mat-error *ngIf="nameFormControl.hasError('required')">
-                Name is required
+            <mat-error *ngIf="contactFormControl.name.errors?.required">
+                Name is required.
             </mat-error>
-            <mat-error *ngIf="nameFormControl.hasError('minlength')">
-                The name is too short!
+            <mat-error *ngIf="contactFormControl.name.errors?.minlength">
+                Name needs to have at least 4 chars.
             </mat-error>
-            <mat-error *ngIf="nameFormControl.hasError('maxlength')">
-                The name is too long!
-            </mat-error> -->
         </mat-form-field>
 
         <!--email-->
@@ -55,14 +43,15 @@
                 type="email"
                 placeholder="e.g: user@domain.com"
                 formControlName="email"
+                required
             />
             <mat-icon matSuffix color="accent">email</mat-icon>
-            <!-- <mat-error *ngIf="emailFormControl.hasError('required')">
+            <mat-error *ngIf="contactFormControl.email.errors?.required">
                 E-mail is required
             </mat-error>
-            <mat-error *ngIf="emailFormControl.hasError('pattern')">
+            <mat-error *ngIf="contactFormControl.email.errors?.email">
                 Please enter a valid e-mail address
-            </mat-error> -->
+            </mat-error>
         </mat-form-field>
 
         <!--phone number-->
@@ -70,16 +59,17 @@
             <input
                 matInput
                 type="number"
-                placeholder="e.g: +49-12345678"
-                formControlName="phoneNumber"
+                placeholder="e.g: 06412345678"
+                formControlName="phone"
+                required
             />
             <mat-icon matSuffix color="accent">phone</mat-icon>
-            <mat-hint align="end" aria-live="polite">
-                Example: +3816412345567
-            </mat-hint>
-            <!-- <mat-error *ngIf="name">
+            <mat-error *ngIf="contactFormControl.phone.errors?.required">
+                Phone number is required
+            </mat-error>
+            <mat-error *ngIf="contactFormControl.phone.errors?.pattern">
                 Please enter a valid phone number
-            </mat-error> -->
+            </mat-error>
         </mat-form-field>
 
         <!--save-->
@@ -88,19 +78,9 @@
             class="save-button"
             type="submit"
             color="accent"
-            [disabled]="newContactForm.invalid"
+            [disabled]="contactForm.invalid"
         >
             Save
-        </button>
-
-        <!--delete-->
-        <button
-            mat-button
-            color="warn"
-            (click)="delete()"
-            [disabled]="newContactForm.invalid"
-        >
-            Remove
         </button>
     </div>
 </form>
