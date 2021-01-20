@@ -4,7 +4,6 @@
         <app-alert
             [message]="error"
             [type]="alertType"
-            (close)="onHandleError()"
             *ngIf="error"
         ></app-alert>
         <div *ngIf="isLoading">
