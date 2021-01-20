@@ -5,10 +5,14 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Contact, EditContactDialogData } from '../interfaces';
 
 const PHONE_NUMBER_REGEX = new RegExp(
-    /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/
+    /^[+][0-9]{2,3}-[0-9]{2,3}-[0-9]{7,8}$/
 );
 
-type FormValues = { name: string; email: string; phone: number };
+type FormValues = {
+    name: string | undefined;
+    email: string | undefined;
+    phone: number | undefined;
+};
 
 @Component({
     selector: 'app-edit-contact',
@@ -51,16 +55,22 @@ export class EditContactComponent implements OnInit {
     generateInitialFromValues(): FormValues {
         const isEditMode = this.data.isEditMode;
         const initialName =
-            isEditMode && this.data.contact ? this.data.contact.name : '';
+            isEditMode && this.data.contact
+                ? this.data.contact.name
+                : undefined;
         const initialEmail =
-            isEditMode && this.data.contact ? this.data.contact.email : '';
+            isEditMode && this.data.contact
+                ? this.data.contact.email
+                : undefined;
         const initialPhone =
-            isEditMode && this.data.contact ? this.data.contact.phone : '';
+            isEditMode && this.data.contact
+                ? this.data.contact.phone
+                : undefined;
 
         return {
             name: initialName,
             email: initialEmail,
-            phone: Number(initialPhone),
+            phone: initialPhone,
         };
     }
 
