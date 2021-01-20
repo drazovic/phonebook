@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import {
+    MatDialog,
+    MatDialogConfig,
+    MatDialogRef,
+} from '@angular/material/dialog';
+import { DataStorageService } from '../shared/data-storage.service';
 import { EditContactComponent } from './edit-contact/edit-contact.component';
+import { EditContactDialogData } from './interfaces';
 
 @Component({
     selector: 'app-contacts',
@@ -8,58 +14,58 @@ import { EditContactComponent } from './edit-contact/edit-contact.component';
     styleUrls: ['./contacts.component.scss'],
 })
 export class ContactsComponent implements OnInit {
-    constructor(private dialog: MatDialog) {}
+    dialogRef: MatDialogRef<EditContactComponent> | null;
 
-    ngOnInit(): void {}
+    constructor(
+        private dialog: MatDialog,
+        private dataStorageService: DataStorageService
+    ) {}
+
+    ngOnInit(): void {
+        console.log(2333);
+        
+        this.dataStorageService.fetchContacts();
+    }
 
     onAddContact() {
-        this.openDialog();
+        const dialogData: EditContactDialogData = {
+            isEditMode: false,
+            title: 'New contact',
+        };
+        this.openDialog(dialogData);
     }
 
     onEditContact($event: any) {
+        const dialogData: EditContactDialogData = {
+            isEditMode: false,
+            title: 'New contact',
+            // contact:
+        };
         console.log($event);
+        this.openDialog(dialogData);
     }
 
-    openDialog(): void {
+    openDialog(dialogData: EditContactDialogData): void {
         const dialogConfig = new MatDialogConfig();
-
         dialogConfig.disableClose = true;
         dialogConfig.autoFocus = true;
+        dialogConfig.data = dialogData;
 
-        this.dialog.open(EditContactComponent, dialogConfig);
+        this.dialogRef = this.dialog.open(EditContactComponent, dialogConfig);
+
+        this.dialogRef
+            .afterClosed()
+            .subscribe((result: EditContactDialogData) => {
+                console.log(result);
+                if (!result.contact) {
+                    return;
+                }
+
+                if (result.isEditMode) {
+                    this.dataStorageService.updateContact(result.contact);
+                } else {
+                    this.dataStorageService.storeNewContact(result.contact);
+                }
+            });
     }
-
-    // openAddDialogContainer(method?: Methods, contact?: Contact) {
-    //     const dialogData: IContactDialogData = {
-    //       method: method,
-    //       contact: contact
-    //     };
-    //     this.dialogRef = this.dialog.open(MatContactDialogComponent, {
-    //       panelClass: 'new-contact-dialog',
-    //       data: dialogData
-    //     });
-    //     this.dialogAfterCloseSubscription = this.dialogRef
-    //       .afterClosed()
-    //       .subscribe((result: IContactDialogData) => {
-    //         if (result) {
-    //           const methodFromResult: Methods = result.method;
-    //           const contactFromResult: Contact = result.contact;
-
-    //           switch (methodFromResult) {
-    //             case Methods.POST:
-    //               // console.log('on post');
-    //               // console.log('contact added -> ', result);
-    //               this.add(contactFromResult);
-    //               break;
-    //             case Methods.DELETE:
-    //               // console.log('on delete');
-    //               this.remove(contactFromResult);
-    //               break;
-    //           }
-
-    //         } else {
-    //           this.onAddingNewContactCanceled.emit();
-    //         }
-    //       });
-    //   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import { Contact } from './contact.model';
+import { Contact } from './interfaces';
 
 @Injectable({
     providedIn: 'root',
@@ -14,6 +14,8 @@ export class ContactsService {
     constructor() {}
 
     setContacts(contacts: Contact[]) {
+        console.log(contacts);
+        
         this.contacts = contacts;
         this.contactsChanged.next(this.contacts.slice());
     }
@@ -28,13 +30,13 @@ export class ContactsService {
     }
 
     updateContact(id: number, updatedContact: Contact) {
-        const contactIndex = this.contacts.findIndex((contact) => contact.id);
+        const contactIndex = this.contacts.findIndex((contact) => contact.ID);
         this.contacts[contactIndex] = updatedContact;
         this.contactsChanged.next(this.contacts.slice());
     }
 
     deleteContacts(id: number) {
-        const contactIndex = this.contacts.findIndex((contact) => contact.id);
+        const contactIndex = this.contacts.findIndex((contact) => contact.ID);
         this.contacts.splice(contactIndex, 1);
         this.contactsChanged.next(this.contacts.slice());
     }
