@@ -36,7 +36,9 @@ export class ContactListComponent implements AfterViewInit, OnInit, OnDestroy {
 
     subscription: Subscription;
 
-    alertType = AlertTypes.INFO;
+    error: string | null;
+    errorAlertType = AlertTypes.ERROR;
+    infoAlertType = AlertTypes.INFO;
 
     @Output() contactSelected = new EventEmitter<Contact>();
 
@@ -50,6 +52,7 @@ export class ContactListComponent implements AfterViewInit, OnInit, OnDestroy {
         this.dataSource = new MatTableDataSource<Contact>(contacts);
         this.subscription = this.contactsService.contactsChanged.subscribe(
             (contacts) => {
+                this.error = null;
                 this.dataSource = new MatTableDataSource<Contact>(contacts);
             }
         );
@@ -63,7 +66,12 @@ export class ContactListComponent implements AfterViewInit, OnInit, OnDestroy {
         if (!contact.ID) {
             return;
         }
-        this.dataStorageService.deleteContact(contact.ID);
+        this.dataStorageService.deleteContact(contact.ID).subscribe(
+            () => {},
+            (errorMessage) => {
+                this.error = errorMessage;
+            }
+        );
     }
 
     ngAfterViewInit() {
