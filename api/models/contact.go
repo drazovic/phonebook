@@ -21,9 +21,8 @@ Validate struct function validate the required parameters sent through the http 
 returns message and true if the requirement is met
 */
 func (contact *Contact) Validate() (map[string]interface{}, bool) {
-	fmt.Println(contact)
-	if len(contact.Name) < 2 {
-		return u.Message(false, "First Name should be at least 2 chars long"), false
+	if len(contact.Name) < 4 {
+		return u.Message(false, "First Name should be at least 4 chars long"), false
 	}
 
 	if contact.Email == "" {
