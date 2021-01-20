@@ -18,51 +18,74 @@ export class DataStorageService {
     ) {}
 
     storeNewContact(contact: Contact) {
-        this.http
+        return this.http
             .post<ApiResponse<Contact>>(
                 `${environment.apiUrl}/contacts`,
                 contact
             )
-            .subscribe((response) => {
-                if (!response.data.ID) {
-                    return;
-                }
-                this.contactsService.addContact(response.data);
-            });
+            .pipe(
+                map((response) => {
+                    if (!response.status) {
+                        throw response.message;
+                    } else {
+                        return response.data;
+                    }
+                }),
+                tap((contact) => this.contactsService.addContact(contact))
+            );
     }
 
     updateContact(contact: Contact) {
-        this.http
+        return this.http
             .patch<ApiResponse<Contact>>(
                 `${environment.apiUrl}/contacts/${contact.ID}`,
                 contact
             )
-            .subscribe((response) => {
-                if (!response.data.ID) {
-                    return;
-                }
-                this.contactsService.updateContact(
-                    response.data.ID,
-                    response.data
-                );
-            });
+            .pipe(
+                map((response) => {
+                    if (!response.status) {
+                        throw response.message;
+                    } else {
+                        return response.data;
+                    }
+                }),
+                tap((contact) => {
+                    if (!contact.ID) {
+                        return;
+                    }
+                    this.contactsService.updateContact(contact.ID, contact);
+                })
+            );
     }
 
     deleteContact(contactId: number) {
-        this.http
+        return this.http
             .delete<ApiResponse<Contact>>(
                 `${environment.apiUrl}/contacts/${contactId}`
             )
-            .subscribe((contact) => {
-                this.contactsService.deleteContacts(contactId);
-            });
+            .pipe(
+                map((response) => {
+                    if (!response.status) {
+                        throw response.message;
+                    } else {
+                        return response.data;
+                    }
+                }),
+                tap((contact) => this.contactsService.deleteContact(contactId))
+            );
     }
 
     fetchContacts() {
         return this.http
             .get<ApiResponse<Contact[]>>(`${environment.apiUrl}/contacts`)
             .pipe(
-                map((response) => response.data),
+                map((response) => {
+                    if (!response.status) {
+                        throw response.message;
+                    } else {
+                        return response.data;
+                    }
+                }),
                 tap((contacts) => this.contactsService.setContacts(contacts))
             );
     }
