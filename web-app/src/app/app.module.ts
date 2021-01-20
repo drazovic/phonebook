@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AlertComponent } from './shared/alert/alert.component';
 import { LayoutModule } from '@angular/cdk/layout';
@@ -20,14 +21,16 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialogModule } from '@angular/material/dialog';
 
+import { AvatarModule } from 'ngx-avatar';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ContactsComponent } from './contacts/contacts.component';
 import { ContactListComponent } from './contacts/contact-list/contact-list.component';
 import { AuthComponent } from './auth/auth.component';
-import { HttpClientModule } from '@angular/common/http';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
 import { EditContactComponent } from './contacts/edit-contact/edit-contact.component';
+import { AuthInterseptorService } from './auth/auth-interceptor.service';
 
 @NgModule({
     declarations: [
@@ -62,8 +65,15 @@ import { EditContactComponent } from './contacts/edit-contact/edit-contact.compo
         MatProgressSpinnerModule,
         MatDialogModule,
         MatToolbarModule,
+        AvatarModule
     ],
-    providers: [],
+    providers: [
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterseptorService,
+            multi: true,
+        },
+    ],
     bootstrap: [AppComponent],
     entryComponents: [EditContactComponent],
 })
