@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+
 import { AuthComponent } from './auth/auth.component';
 import { AuthGard } from './auth/auth.gard';
 import { ContactsComponent } from './contacts/contacts.component';
