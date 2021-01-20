@@ -3,6 +3,7 @@
         <h2>{{ isLoginMode ? 'Login' : 'Sign up' }}</h2>
         <app-alert
             [message]="error"
+            [type]="alertType"
             (close)="onHandleError()"
             *ngIf="error"
         ></app-alert>

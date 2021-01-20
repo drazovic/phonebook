@@ -1,8 +1,16 @@
 p {
-    color: red;
-    border: 1px solid red;
     padding: 1em;
     border-radius: 4px;
-    background-color: antiquewhite;
     text-align: center;
+}
+
+.error {
+    color: red;
+    background-color: antiquewhite;
+    border: 1px solid red;
+}
+
+.info {
+    background-color: rgb(232, 240, 254);
+    border: 1px solid rgb(232, 240, 254);
 }
