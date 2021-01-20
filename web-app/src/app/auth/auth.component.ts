@@ -3,8 +3,8 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { AuthService } from './auth.service';
-import { AuthResponseData } from './auth.service';
+import { ApiResponse } from '../api-response.model';
+import { AuthData, AuthService } from './auth.service';
 
 @Component({
     selector: 'app-auth',
@@ -28,11 +28,11 @@ export class AuthComponent implements OnInit {
         if (!form.valid) {
             return;
         }
-        
+
         const email = form.value.email;
         const password = form.value.password;
 
-        let authObservable: Observable<AuthResponseData>;
+        let authObservable: Observable<ApiResponse<AuthData>>;
 
         this.isLoading = true;
         if (this.isLoginMode) {

@@ -5,18 +5,15 @@ import { BehaviorSubject, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
+import { ApiResponse } from '../api-response.model';
 
 import { User } from './user.model';
 
-export interface AuthResponseData {
-    data: {
-        token: string;
-        email: string;
-        expiresIn: number;
-        ID: string;
-    };
-    message: string;
-    success: boolean;
+export interface AuthData {
+    token: string;
+    email: string;
+    expiresAt: number;
+    ID: string;
 }
 
 @Injectable({
@@ -30,7 +27,7 @@ export class AuthService {
 
     signup(email: string, password: string) {
         return this.http
-            .post<AuthResponseData>(`${environment.apiUrl}/users/signup`, {
+            .post<ApiResponse<AuthData>>(`${environment.apiUrl}/users/signup`, {
                 email: email,
                 password: password,
             })
@@ -42,7 +39,7 @@ export class AuthService {
 
     login(email: string, password: string) {
         return this.http
-            .post<AuthResponseData>(`${environment.apiUrl}/users/login`, {
+            .post<ApiResponse<AuthData>>(`${environment.apiUrl}/users/login`, {
                 email: email,
                 password: password,
             })
@@ -95,13 +92,15 @@ export class AuthService {
         }, expirationDuration);
     }
 
-    private handleAuthentication(response: AuthResponseData) {
+    private handleAuthentication(response: ApiResponse<AuthData>) {
         const data = response.data;
-        const expirationDate = new Date(new Date().getTime() + data.expiresIn);
+
+        const expirationTimestamp = data.expiresAt * 1000;
+        const expirationDate = new Date(data.expiresAt * 1000);
         const user = new User(data.email, data.ID, data.token, expirationDate);
 
         this.user.next(user);
-        this.autoLogout(data.expiresIn * 1000);
+        this.autoLogout(expirationTimestamp);
         localStorage.setItem('userData', JSON.stringify(user));
     }
 
