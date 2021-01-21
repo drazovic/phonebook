@@ -34,7 +34,39 @@ App for phonebook contact management.
         MVC pattern
         ...
 
+## Requirements
+1. mySQL database installed and running - https://dev.mysql.com/doc/mysql-installation-excerpt/8.0/en/
+
+2. go lang installed - https://golang.org/doc/install
+
+3. node.js installed - https://nodejs.org/en/
+
+4. angular cli installed (node.js has to be installed first). In your terminal run:
+
+        npm install -g @angular/cli
+
+
 ## How to run everything
+1. Clone this repo
+    
+2. In terminal run:
+        
+        cd phonebook/api
+
+3. In terminal run:
+
+        go run main.go
+
+4. In new terminal run:
+
+       // This depends of current directory where you opened the terminal
+       cd ../web-app
+
+5. In terminal run:
+
+        ng s
+
+6. Go to http://localhost:4200
 
 
 ## External dependencies
