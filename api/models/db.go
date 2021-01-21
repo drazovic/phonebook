@@ -12,7 +12,6 @@ import (
 var db *gorm.DB //database
 
 func init() {
-
 	e := godotenv.Load() //Load .env file
 	if e != nil {
 		fmt.Print(e)
@@ -22,18 +21,24 @@ func init() {
 	password := os.Getenv("db_password")
 	dbName := os.Getenv("db_name")
 
-	dbURI := username + ":" + password + "@/" + dbName + "?parseTime=true"
+	dbURI := username + ":" + password + "@/" + "?parseTime=true"
 
 	conn, err := gorm.Open("mysql", dbURI)
 	if err != nil {
 		fmt.Print(err)
 	}
 
+	// If there is no database create one and use it
+	conn = conn.Exec("CREATE DATABASE IF NOT EXISTS " + dbName)
+	conn = conn.Exec("USE " + dbName)
+
 	db = conn
-	db.Debug().AutoMigrate(&User{}, &Contact{}) //Database migration
+
+	//Database migration
+	db.Debug().AutoMigrate(&User{}, &Contact{}) 
 }
 
-// GetDB ...
+// GetDB returs created DB object
 func GetDB() *gorm.DB {
 	return db
 }
