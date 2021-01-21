@@ -1,10 +1,7 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 
 import { AuthComponent } from './auth/auth.component';
-import { AuthGard } from './auth/auth.gard';
-import { ContactsResolverService } from './contacts/contacts-resolver.service';
-import { ContactsComponent } from './contacts/contacts.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/contacts', pathMatch: 'full' },
@@ -14,14 +11,15 @@ const routes: Routes = [
     },
     {
         path: 'contacts',
-        component: ContactsComponent,
-        canActivate: [AuthGard],
-        resolve: [ContactsResolverService],
+        loadChildren: () =>
+            import('./contacts/contacts.module').then((m) => m.ContactsModule),
     },
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes)],
+    imports: [
+        RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
+    ],
     exports: [RouterModule],
 })
 export class AppRoutingModule {}

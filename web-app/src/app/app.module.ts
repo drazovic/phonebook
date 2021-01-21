@@ -1,71 +1,29 @@
+import { NgModule } from '@angular/core';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { AlertComponent } from './shared/alert/alert.component';
-import { LayoutModule } from '@angular/cdk/layout';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatListModule } from '@angular/material/list';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSortModule } from '@angular/material/sort';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatDialogModule } from '@angular/material/dialog';
-
-import { AvatarModule } from 'ngx-avatar';
 
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { ContactsComponent } from './contacts/contacts.component';
-import { ContactListComponent } from './contacts/contact-list/contact-list.component';
-import { AuthComponent } from './auth/auth.component';
-import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
-import { EditContactComponent } from './contacts/edit-contact/edit-contact.component';
+import { ContactsModule } from './contacts/contacts.module';
+import { SharedModule } from './shared/shared.module';
+
 import { AuthInterseptorService } from './auth/auth-interceptor.service';
 
+import { AppComponent } from './app.component';
+import { AuthComponent } from './auth/auth.component';
+
 @NgModule({
-    declarations: [
-        AppComponent,
-        ContactsComponent,
-        AuthComponent,
-        AlertComponent,
-        LoadingSpinnerComponent,
-        ContactListComponent,
-        EditContactComponent,
-    ],
+    declarations: [AppComponent, AuthComponent],
     imports: [
         BrowserModule,
-        AppRoutingModule,
-        HttpClientModule,
-        FormsModule,
-        ReactiveFormsModule,
         BrowserAnimationsModule,
-        MatToolbarModule,
-        MatIconModule,
-        LayoutModule,
-        MatButtonModule,
-        MatSidenavModule,
-        MatListModule,
-        MatTableModule,
-        MatPaginatorModule,
-        MatSortModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatInputModule,
+        HttpClientModule,
+        AppRoutingModule,
         MatMenuModule,
-        MatProgressSpinnerModule,
-        MatDialogModule,
-        MatToolbarModule,
-        AvatarModule
+        SharedModule,
+        ContactsModule,
     ],
     providers: [
         {
@@ -75,6 +33,5 @@ import { AuthInterseptorService } from './auth/auth-interceptor.service';
         },
     ],
     bootstrap: [AppComponent],
-    entryComponents: [EditContactComponent],
 })
 export class AppModule {}
