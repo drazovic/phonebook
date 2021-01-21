@@ -9,7 +9,7 @@ App for phonebook contact management.
 
 ## Features implemented:
     - Front-end
-        Authentication (signup, login, logout, auto login, auto logout, route guard),
+        Authentication (signup, login, logout, auto login, auto logout, route guard)
         Contacts CRUD operations
         Forms (template-driven, reactive, input validation)
         Routing
@@ -21,26 +21,20 @@ App for phonebook contact management.
         ViewChild
         localStorage
         rxjs (observables, subscriptions, operators)
+        MVC pattern
         ...
+        
     - Back-end
         Routing (with gorilla/mux)
         CORS handling (with rs/cors)
         Database connection (ORM with gorm, auto migration)
         Authentication (via JWT, x/crypto)
         Environment configuration (via joho/dotenv)
+        REST standard
+        MVC pattern
         ...
 
-## How it works
-When new user navigates to web app's base route (http://localhost:4200) he is automatically
-routed to auth page. Auth page has signup/login functionality
-
 ## How to run everything
-Clone the repo
-    cd /api
-
-    go get
-
-    
 
 
 ## External dependencies
