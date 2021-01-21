@@ -57,6 +57,10 @@ App for phonebook contact management.
 
         go run main.go
 
+4. In terminal run:
+
+        go get
+
 4. In new terminal run:
 
        // This depends of current directory where you opened the terminal
@@ -64,9 +68,13 @@ App for phonebook contact management.
 
 5. In terminal run:
 
+        npm install
+
+6. In terminal run:
+
         ng s
 
-6. Go to http://localhost:4200
+7. Go to http://localhost:4200
 
 
 ## External dependencies
