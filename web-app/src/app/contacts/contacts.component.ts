@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
     MatDialog,
     MatDialogConfig,
@@ -16,7 +16,7 @@ import { Contact, EditContactDialogData } from './interfaces';
     templateUrl: './contacts.component.html',
     styleUrls: ['./contacts.component.scss'],
 })
-export class ContactsComponent implements OnInit, OnDestroy {
+export class ContactsComponent implements OnInit {
     dialogRef: MatDialogRef<EditContactComponent> | null;
     error: string | null;
     alertType = AlertTypes.ERROR;
