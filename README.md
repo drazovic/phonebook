@@ -13,8 +13,7 @@ App for phonebook contact management.
         Contacts CRUD operations
         Forms (template-driven, reactive, input validation)
         Routing
-        Feature modules
-        Lazy loading
+        Lazy loaded feature modules
         HTTP
         HTTP Interceptor
         Resolver
@@ -48,33 +47,37 @@ App for phonebook contact management.
 
 ## How to run everything
 1. Clone this repo
+
+2. Rename /api/.env.example file to .env
+
+3. Change db_user and db_password values if they differ for a user of your mysql instance 
     
-2. In terminal run:
+4. In terminal run:
         
         cd phonebook/api
 
-3. In terminal run:
-
-        go run main.go
-
-4. In terminal run:
+5. In terminal run:
 
         go get
 
-4. In new terminal run:
+6. In terminal run:
+
+        go run main.go
+
+7. In new terminal run:
 
        // This depends of current directory where you opened the terminal
        cd ../web-app
 
-5. In terminal run:
+8. In terminal run:
 
         npm install
 
-6. In terminal run:
+9. In terminal run:
 
         ng s
 
-7. Go to http://localhost:4200
+10. Go to http://localhost:4200
 
 
 ## External dependencies
