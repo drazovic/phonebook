@@ -51,8 +51,6 @@ export class AuthService {
             })
             .pipe(
                 map((response) => {
-                    console.log(response);
-
                     if (!response.status) {
                         throw response.message;
                     } else {
