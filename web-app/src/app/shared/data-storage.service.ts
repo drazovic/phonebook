@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { ContactsService } from '../contacts/contacts.service';
 import { environment } from 'src/environments/environment';
 
-import { ApiResponse } from '../api-response.model';
+import { ApiResponse } from './types';
 import { Contact } from '../contacts/interfaces';
 import { map, tap } from 'rxjs/operators';
 

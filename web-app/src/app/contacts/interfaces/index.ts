@@ -10,3 +10,9 @@ export interface EditContactDialogData {
     isEditMode: Boolean;
     contact?: Contact;
 }
+
+export interface FormValues {
+    name: string | undefined;
+    email: string | undefined;
+    phone: number | undefined;
+}

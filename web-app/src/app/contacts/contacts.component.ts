@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
     MatDialog,
     MatDialogConfig,
     MatDialogRef,
 } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { DataStorageService } from '../shared/data-storage.service';
 import { AlertTypes } from '../shared/enums';
@@ -16,7 +16,7 @@ import { Contact, EditContactDialogData } from './interfaces';
     templateUrl: './contacts.component.html',
     styleUrls: ['./contacts.component.scss'],
 })
-export class ContactsComponent implements OnInit {
+export class ContactsComponent implements OnInit, OnDestroy {
     dialogRef: MatDialogRef<EditContactComponent> | null;
     error: string | null;
     alertType = AlertTypes.ERROR;

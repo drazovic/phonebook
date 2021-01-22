@@ -2,7 +2,7 @@
     <span>
         <button mat-button routerLink="/contacts">Phonebook</button>
     </span>
-    <div fxLayout="row" fxShow="false" fxShow.gt-sm>
+    <div>
         <button *ngIf="!isAuthenticated" mat-button routerLink="/auth">
             <mat-icon>login</mat-icon>
             Login

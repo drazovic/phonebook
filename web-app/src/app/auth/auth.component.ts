@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { ApiResponse } from '../api-response.model';
+import { ApiResponse } from '../shared/types';
 import { AuthData, AuthService } from './auth.service';
 import { AlertTypes } from 'src/app/shared/enums';
 

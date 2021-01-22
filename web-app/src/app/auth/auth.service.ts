@@ -5,7 +5,7 @@ import { BehaviorSubject, throwError } from 'rxjs';
 import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
-import { ApiResponse } from '../api-response.model';
+import { ApiResponse } from '../shared/types';
 
 import { User } from './user.model';
 
@@ -106,7 +106,6 @@ export class AuthService {
 
     private handleAuthentication(response: ApiResponse<AuthData>) {
         const data = response.data;
-
         const expirationTimestamp = data.expiresAt * 1000;
         const expirationDate = new Date(expirationTimestamp);
         const user = new User(data.email, data.ID, data.token, expirationDate);

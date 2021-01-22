@@ -1,18 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
-import { Contact, EditContactDialogData } from '../interfaces';
+import { Contact, EditContactDialogData, FormValues } from '../interfaces';
 
 const PHONE_NUMBER_REGEX = new RegExp(
     /^[+][0-9]{2,3}-[0-9]{2,3}-[0-9]{7,8}$/
 );
-
-type FormValues = {
-    name: string | undefined;
-    email: string | undefined;
-    phone: number | undefined;
-};
 
 @Component({
     selector: 'app-edit-contact',
