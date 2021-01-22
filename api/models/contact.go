@@ -8,7 +8,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// Contact ...
+// Contact model definition
 type Contact struct {
 	gorm.Model
 	Name   string `json:"name"`
@@ -20,7 +20,7 @@ type Contact struct {
 const phoneNumberRegex = `/^[+][0-9]{2,3}-[0-9]{2,3}-[0-9]{7,8}$/`
 
 /*
-Validate struct function validate the required parameters sent through the http request body
+Validate struct function validates the required parameters sent through the http request body
 returns message and true if the requirement is met
 */
 func (contact *Contact) Validate() (map[string]interface{}, bool) {
@@ -45,7 +45,7 @@ func (contact *Contact) Validate() (map[string]interface{}, bool) {
 	return u.Message(true, "success"), true
 }
 
-// Create ...
+// Create creates new contact if Validate returns true
 func (contact *Contact) Create() map[string]interface{} {
 	if resp, ok := contact.Validate(); !ok {
 		return resp
@@ -58,7 +58,7 @@ func (contact *Contact) Create() map[string]interface{} {
 	return resp
 }
 
-// GetContacts ...
+// GetContacts gets all contacts for authorized user
 func GetContacts(userID uint) []*Contact {
 	contacts := make([]*Contact, 0)
 	err := GetDB().Table("contacts").Where("user_id = ?", userID).Find(&contacts).Error
@@ -70,7 +70,7 @@ func GetContacts(userID uint) []*Contact {
 	return contacts
 }
 
-// GetContact ...
+// GetContact gets contact based on uid
 func GetContact(ID uint) *Contact {
 	contact := &Contact{}
 	err := GetDB().First(contact, ID).Error
@@ -82,13 +82,13 @@ func GetContact(ID uint) *Contact {
 	return contact
 }
 
-// EditContact ...
+// EditContact updates the contact
 func EditContact(databaseContact, updatedContact *Contact) *Contact {
 	GetDB().Model(&databaseContact).Updates(&updatedContact)
 	return updatedContact
 }
 
-// DeleteContact ...
+// DeleteContact deletes contact
 func DeleteContact(contactID uint) {
 	GetDB().Delete(&Contact{}, contactID)
 	return

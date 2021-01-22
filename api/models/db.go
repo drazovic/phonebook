@@ -17,12 +17,13 @@ func init() {
 		fmt.Print(e)
 	}
 
+	// Get variables from .env file
 	username := os.Getenv("db_user")
 	password := os.Getenv("db_password")
 	dbName := os.Getenv("db_name")
-
 	dbURI := username + ":" + password + "@/" + "?parseTime=true"
 
+	// Connect to database
 	conn, err := gorm.Open("mysql", dbURI)
 	if err != nil {
 		fmt.Print(err)
@@ -34,7 +35,7 @@ func init() {
 
 	db = conn
 
-	//Database migration
+	// Database migration
 	db.Debug().AutoMigrate(&User{}, &Contact{}) 
 }
 

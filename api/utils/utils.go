@@ -5,12 +5,12 @@ import (
 	"net/http"
 )
 
-// Message ...
+// Message creates stadardized message for response
 func Message(status bool, message string) map[string]interface{} {
 	return map[string]interface{}{"status": status, "message": message}
 }
 
-// Respond ...
+// Respond creates stadardized response
 func Respond(w http.ResponseWriter, data map[string]interface{}) {
 	w.Header().Add("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(data)

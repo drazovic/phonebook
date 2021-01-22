@@ -13,8 +13,9 @@ import (
 func main() {
 	router := router.GetRouter()
 
-	router.Use(handlers.JwtAuthentication) //attach JWT auth middleware
+	router.Use(handlers.JwtAuthentication) // Handle authentication
 
+	// handle CORS
 	corsHandler := cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:4200"},
 		AllowCredentials: true,

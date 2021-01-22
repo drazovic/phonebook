@@ -12,7 +12,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// CreateContact  ...
+// CreateContact creates new contact for authenticated user
 func CreateContact(w http.ResponseWriter, r *http.Request) {
 	authenticatedUserID := r.Context().Value(handlers.AuthenticatedUserIDKey).(uint) //Grab the id of the user that send the request
 	contact := &models.Contact{}
@@ -28,7 +28,7 @@ func CreateContact(w http.ResponseWriter, r *http.Request) {
 	u.Respond(w, resp)
 }
 
-// GetAllContacts ...
+// GetAllContacts fetches all contacts for authenticated user
 func GetAllContacts(w http.ResponseWriter, r *http.Request) {
 	authenticatedUserID := r.Context().Value(handlers.AuthenticatedUserIDKey).(uint) //Grab the id of the user that send the request
 
@@ -38,7 +38,7 @@ func GetAllContacts(w http.ResponseWriter, r *http.Request) {
 	u.Respond(w, resp)
 }
 
-// EditContact ...
+// EditContact  updates contact for authenticated user
 func EditContact(w http.ResponseWriter, r *http.Request) {
 	contactID, error := strconv.ParseUint(mux.Vars(r)["id"], 10, 64)
 	if error != nil {
@@ -68,7 +68,7 @@ func EditContact(w http.ResponseWriter, r *http.Request) {
 	u.Respond(w, resp)
 }
 
-// DeleteContact ...
+// DeleteContact  deletes contact for authenticated user
 func DeleteContact(w http.ResponseWriter, r *http.Request) {
 	contactID, error := strconv.ParseUint(mux.Vars(r)["id"], 10, 64)
 	if error != nil {

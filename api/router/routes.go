@@ -6,7 +6,7 @@ import (
 	"api/controllers"
 )
 
-// GetRouter ...
+// GetRouter creates mux router and registers all routes along with their controllers
 func GetRouter() *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
 

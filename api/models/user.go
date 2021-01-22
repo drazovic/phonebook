@@ -17,7 +17,7 @@ type Token struct {
 	jwt.StandardClaims
 }
 
-// User ...
+// User model definition
 type User struct {
 	gorm.Model
 	Email     string `json:"email"`
@@ -28,7 +28,8 @@ type User struct {
 
 var emailRegex = regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
 
-//Validate incoming user details...
+// Validate incoming parameters sent through the http request body
+// returns message and true if the requirement is met
 func (user *User) Validate() (map[string]interface{}, bool) {
 
 	if !emailRegex.MatchString(user.Email) {
@@ -54,7 +55,7 @@ func (user *User) Validate() (map[string]interface{}, bool) {
 	return u.Message(false, "Requirement passed"), true
 }
 
-// Create ...
+// Create crates new user
 func (user *User) Create() map[string]interface{} {
 	if resp, ok := user.Validate(); !ok {
 		return resp
@@ -81,7 +82,7 @@ func (user *User) Create() map[string]interface{} {
 	return response
 }
 
-// Login ...
+// Login checks if user's credentials are valid
 func Login(email, password string) map[string]interface{} {
 	user := &User{}
 	err := GetDB().Table("users").Where("email = ?", email).First(user).Error

@@ -8,7 +8,7 @@ import (
 	"api/models"
 )
 
-// Signup ...
+// Signup decodes data from request body and creates new user 
 func Signup(w http.ResponseWriter, r *http.Request) {
 	user := &models.User{}
 	err := json.NewDecoder(r.Body).Decode(user) //decode the request body into struct and failed if any error occur
@@ -17,11 +17,11 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp := user.Create() //Create account
+	resp := user.Create() // Create account
 	u.Respond(w, resp)
 }
 
-// Login ...
+// Login decodes data from request body and log user in
 func Login(w http.ResponseWriter, r *http.Request) {
 	user := &models.User{}
 	err := json.NewDecoder(r.Body).Decode(user) //decode the request body into struct and failed if any error occur

@@ -14,10 +14,10 @@ import (
 
 type contextKey int
 
-// AuthenticatedUserIDKey ...
+// AuthenticatedUserIDKey for storing userID in the request context
 const AuthenticatedUserIDKey contextKey = 0
 
-// JwtAuthentication ...
+// JwtAuthentication checks if user's token is valid, parses userID from it and store it in the request context
 var JwtAuthentication = func(next http.Handler) http.Handler {
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -45,7 +45,8 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 			return
 		}
 
-		splitted := strings.Split(tokenHeader, " ") //The token normally comes in format `Bearer {token-body}`, we check if the retrieved token matched this requirement
+		// The token comes in format `Bearer {token-body}`, we check if the retrieved token matched this requirement
+		splitted := strings.Split(tokenHeader, " ") 
 		if len(splitted) != 2 {
 			response = u.Message(false, "Invalid/Malformed auth token")
 			w.WriteHeader(http.StatusForbidden)
